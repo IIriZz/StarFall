@@ -1,2 +1,0 @@
-# StarFall
-Pygame project
