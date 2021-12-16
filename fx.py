@@ -5,8 +5,17 @@ import pygame
 from main import *
 
 
-NUM_VOXELS = 1000
-COLORS = 'blue cyan violet purple'.split()
+NUM_VOXELS = 10000
+COLORS = [
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
+]
 Z_DISTANCE = 140
 
 
@@ -32,7 +41,7 @@ class Voxel:
         self.pos3D = self.get_pos3d() if self.pos3D.z < 1 else self.pos3D
 
         self.screen_pos = vec2(self.pos3D.x, self.pos3D.y) / self.pos3D.z + CENTER
-        self.size = (Z_DISTANCE - self.pos3D.z) / (self.pos3D.z * 0.5)
+        self.size = (Z_DISTANCE - self.pos3D.z) / (self.pos3D.z * 0.1)
 
     def draw(self):
         pygame.draw.rect(self.screen, self.color, (*self.screen_pos, self.size, self.size))

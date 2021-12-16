@@ -1,5 +1,5 @@
 import pygame
-
+from random import randint
 
 class Object:
     animation_step = 50
@@ -7,35 +7,91 @@ class Object:
     animation_cooldown = 50
     frame = 0
 
-    def __init__(self, anim_list, pos):
+    def __init__(self, anim_list):
         self.list = anim_list
-        self.pos = pos
-        self.rect = self.list[self.frame].get_rect()
+        self.loc = 0
+        self.sound = pygame.mixer.Sound('data/music/gui/scan.wav')
+        self.text_font = pygame.font.Font('data/font/Pixeltype.ttf', 50)
+        self.pos = randint(100, 900), randint(100, 400)
+        self.rect = self.list[self.frame].get_rect(center=self.pos)
+
 
     def draw(self, screen):
         current_time = pygame.time.get_ticks()
         if current_time - self.animation_update >= self.animation_cooldown:
             self.frame += 1
             self.animation_update = current_time
-            if self.frame >= len(self.list):
-                self.frame = 0
-        screen.blit(self.list[self.frame], self.pos)
+            self.frame %= len(self.list)
+
+        if self.loc == 0:
+            self.list[self.frame] = pygame.transform.scale(self.list[self.frame], (200, 200))
+            self.rect = self.list[self.frame].get_rect(center=self.pos)
+            self.rect.x += 100
+            screen.blit(self.list[self.frame], self.rect)
+        else:
+            self.list[self.frame] = pygame.transform.scale(self.list[self.frame], (400, 400))
+            self.rect = self.list[self.frame].get_rect(center=(500, 250))
+            self.txt = self.text_font.render(f'Object type: {self.return_type()}', False, 'White')
+            self.text_rect = self.txt.get_rect(center=(500, 400))
+            screen.blit(self.list[self.frame], self.rect)
+            screen.blit(self.txt, self.text_rect)
+
+    def check(self, pos):
+        if self.rect.collidepoint(pos):
+            self.sound.play()
+            if self.loc == 0:
+                self.loc = 1
+            else:
+                self.loc = 0
+
+    def return_type(self):
+        return type(self)
 
 
 class Star(Object):
-    def info(self): ...
+    def return_type(self):
+        return 'Star'
 
 
-class Asteroid(Object): ...
+class Asteroid(Object):
+    def return_type(self):
+        return 'Asteroid'
 
 
-class Planet(Object): ...
+class Planet(Object):
+    def return_type(self):
+        return 'Planet'
+
+    def draw(self, screen):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.animation_update >= self.animation_cooldown:
+            self.frame += 1
+            self.animation_update = current_time
+            self.frame %= len(self.list)
+
+        if self.loc == 0:
+            self.list[self.frame] = pygame.transform.scale(self.list[self.frame], (200, 200))
+            self.rect = self.list[self.frame].get_rect(center=self.pos)
+            self.rect.x += 100
+            screen.blit(self.list[self.frame], self.rect)
+        else:
+            self.list[self.frame] = pygame.transform.scale(self.list[self.frame], (400, 400))
+            self.rect = self.list[self.frame].get_rect(center=(500, 250))
+            self.txt = self.text_font.render(f'My thoughts on exams be like:', False, 'White')
+            self.text_rect = self.txt.get_rect(center=(500, 400))
+            screen.blit(self.list[self.frame], self.rect)
+            screen.blit(self.txt, self.text_rect)
 
 
-class GasGiant(Planet): ...
+class GasGiant(Planet):
+    def return_type(self):
+        return 'Gas Giant'
 
 
 class BlackHole(Object):
+    def return_type(self):
+        return 'Black hole'
+
     def active_hyperspace(self, app):
         import fx
 
