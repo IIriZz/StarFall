@@ -12,7 +12,7 @@ class Voxel:
         self.pos3D = self.get_pos3d()
         self.vel = random.uniform(0.45, 0.95)
         self.color = random.choice(COLORS)
-        self.screen_pos = vec2(0, 0)
+        self.screen_pos = VEC2(0, 0)
         self.size = 5
 
     @staticmethod
@@ -21,13 +21,13 @@ class Voxel:
         radius = random.randrange(HEIGHT // 4, HEIGHT // 3) * scale_pos
         x = radius * math.sin(angle)
         y = radius * math.cos(angle)
-        return vec3(x, y, Z_DISTANCE)
+        return VEC3(x, y, Z_DISTANCE)
 
     def update(self):
         self.pos3D.z -= self.vel
         self.pos3D = self.get_pos3d() if self.pos3D.z < 1 else self.pos3D
 
-        self.screen_pos = vec2(self.pos3D.x, self.pos3D.y) / self.pos3D.z + CENTER
+        self.screen_pos = VEC2(self.pos3D.x, self.pos3D.y) / self.pos3D.z + CENTER
         self.size = (Z_DISTANCE - self.pos3D.z) / (self.pos3D.z * 0.1)
 
     def draw(self):

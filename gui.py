@@ -32,9 +32,31 @@ class Button:
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 self.action = True
-                print("CLICKED")
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
         screen.blit(self.image, self.rect)
 
         return self.action
+
+
+def camera_func(camera, target):
+    x = -target.x + WIDTH / 2
+    y = -target.y + HEIGHT / 2
+    width, height = camera.width, camera.height
+    x = min(0, x)
+    x = max(-(camera.width - WIDTH), x)
+    y = max(-(camera.height - HEIGHT), y)
+    y = min(0, y)
+    return pygame.Rect(x, y, width, height)
+
+
+class Camera:
+    def __init__(self, func, width, height):
+        self.func = func
+        self.camera = pygame.Rect(0, 0, width, height)
+
+    def update(self, target):
+        self.camera = self.func(self.camera, target.rect)
+
+    def apply(self, target):
+        return target.rect.move(self.camera.topleft)
