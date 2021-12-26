@@ -3,20 +3,7 @@ import math
 import pygame
 
 from main import *
-
-
-NUM_VOXELS = 10000
-COLORS = [
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-    pygame.color.Color((random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))),
-]
-Z_DISTANCE = 140
+from const import *
 
 
 class Voxel:
