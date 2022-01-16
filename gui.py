@@ -1,23 +1,26 @@
 import pygame
-
-from const import *
+import const
 
 
 class Cursor(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        self.image = pygame.image.load("data/sprites_gui/cursor.png")
+        self.rect = self.image.get_rect(topleft=(0, 0))
 
-        self.image = pygame.image.load('data/sprites/space_ships/spaceship.png')
-        self.rect = self.image.get_rect()
+    def update(self, pos):
+        self.rect.topleft = pos
 
-    def update(self, screen, pos):
-        screen.blit(self.image, pos)
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
 
 
 class Button:
     def __init__(self, x, y, image, scale):
         width = image.get_width()
         height = image.get_height()
+
+        self.sound = pygame.mixer.Sound('data/music/gui/zoom.wav')
 
         self.action = False
         self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
@@ -29,9 +32,10 @@ class Button:
     def draw(self, screen):
         pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:
                 self.clicked = True
                 self.action = True
+                self.sound.play()
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
         screen.blit(self.image, self.rect)
@@ -39,24 +43,28 @@ class Button:
         return self.action
 
 
-def camera_func(camera, target):
-    x = -target.x + WIDTH / 2
-    y = -target.y + HEIGHT / 2
-    width, height = camera.width, camera.height
-    x = min(0, x)
-    x = max(-(camera.width - WIDTH), x)
-    y = max(-(camera.height - HEIGHT), y)
-    y = min(0, y)
-    return pygame.Rect(x, y, width, height)
+class Background(pygame.sprite.Sprite):
+    def __init__(self, image):
+        super().__init__(const.ALL_SPRITES)
+
+        self.image = image
+        self.rect = self.image.get_rect()
 
 
 class Camera:
-    def __init__(self, func, width, height):
-        self.func = func
+    def __init__(self, width, height):
         self.camera = pygame.Rect(0, 0, width, height)
+        self.width = width
+        self.height = height
+
+    def apply(self, obj):
+        return obj.rect.move(self.camera.topleft)
 
     def update(self, target):
-        self.camera = self.func(self.camera, target.rect)
+        x = -target.rect.x + (const.WIDTH / 2)
+        y = -target.rect.y + (const.HEIGHT / 2)
 
-    def apply(self, target):
-        return target.rect.move(self.camera.topleft)
+        x = min(0, x)
+        y = min(0, y)
+
+        self.camera = pygame.Rect(x, y, self.width, self.height)
