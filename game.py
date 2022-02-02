@@ -1,6 +1,5 @@
 import random
 import sys
-import threading
 
 import pygame
 
@@ -23,6 +22,7 @@ pygame.mixer.music.play(-1)
 pygame.display.set_caption("StarFall")
 pygame.display.set_icon(pygame.image.load('data/sprites_gui/icon.png'))
 
+bg = Background(pygame.image.load('data/Pixel-Galaxy.jpg'))
 bh = BlackHole(AnimatedSprite(pygame.image.load('data/sprites/objects/black_holes/black_hole (4).png'), 50, 1, 200, 200))
 
 asteroids = [Asteroid(pygame.image.load(f'data/sprites/objects/asteroids/normal/asteroid ({random.randint(1, 7)}).png')) for _ in range(20)]

@@ -2,7 +2,6 @@ import pygame
 import random
 import ctypes
 
-from gui import *
 
 user32 = ctypes.windll.user32
 

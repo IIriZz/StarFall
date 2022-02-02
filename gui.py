@@ -1,5 +1,6 @@
 import pygame
-import const
+
+from const import *
 
 
 class Cursor(pygame.sprite.Sprite):
@@ -45,7 +46,7 @@ class Button:
 
 class Background(pygame.sprite.Sprite):
     def __init__(self, image):
-        super().__init__(const.ALL_SPRITES)
+        super().__init__(ALL_SPRITES)
 
         self.image = image
         self.rect = self.image.get_rect()
@@ -61,8 +62,8 @@ class Camera:
         return obj.rect.move(self.camera.topleft)
 
     def update(self, target):
-        x = -target.rect.x + (const.WIDTH / 2)
-        y = -target.rect.y + (const.HEIGHT / 2)
+        x = -target.rect.x + (WIDTH / 2)
+        y = -target.rect.y + (HEIGHT / 2)
 
         x = min(0, x)
         y = min(0, y)
